@@ -1,0 +1,24 @@
+# AJ Bell Screener Table Extraction
+# https://realpython.com/beautiful-soup-web-scraper-python/#find-elements-by-id
+import pandas as pd
+from bs4 import BeautifulSoup as bs
+
+#ratings scrape
+html=open(r'filepath_ratings')
+
+soup=bs(html,"html.parser")
+rows=soup.find_all("tr")
+
+df = pd.DataFrame({'name','url','medal'})
+x=1 # starts at 1 because starting at 0 causes a NaN error
+lst=[]
+while x < len(rows):
+	r_name=rows[x].find("span")
+	r_medal=rows[x].find(role="img")["class"]
+	r_url=rows[x].find("a")["href"]
+	lst.append({'name':r_name,'url':r_url,'medal':r_medal})
+	x=x+1
+
+df=pd.DataFrame(lst)
+df.to_clipboard()
+
